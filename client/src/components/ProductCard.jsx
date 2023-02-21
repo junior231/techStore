@@ -19,7 +19,7 @@ import { StarIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 
 // create rating component
-const Rating = ({ rating, numReviews }) => {
+const Rating = ({ rating, numberOfReviews }) => {
   const [iconSize, setIconSize] = useState("14px");
   return (
     <Flex>
@@ -47,7 +47,7 @@ const Rating = ({ rating, numReviews }) => {
         />
       </HStack>
       <Text fontSize="md" fontWeight="bold" ml="4px">
-        {`${numReviews} ${numReviews === 1 ? "Review" : "Reviews"}`}
+        {`${numberOfReviews} ${numberOfReviews === 1 ? "Review" : "Reviews"}`}
       </Text>
     </Flex>
   );
@@ -67,7 +67,7 @@ const ProductCard = ({ product }) => {
       position="relative"
     >
       {/* if product is new, display green circle */}
-      {product.isNew && (
+      {product.productIsNew && (
         <Circle
           size="10px"
           position="absolute"
@@ -96,7 +96,7 @@ const ProductCard = ({ product }) => {
           </Badge>
         )}
         {/* if product is new, show New text */}
-        {product.isNew && (
+        {product.productIsNew && (
           <Badge rounded="full" px="2" fontSize="0.8em" colorScheme="green">
             New
           </Badge>
@@ -116,7 +116,10 @@ const ProductCard = ({ product }) => {
         </Link>
       </Flex>
       <Flex justifyContent="space-between" alignContent="center" py="2">
-        <Rating rating={product.rating} numReviews={product.numReviews} />
+        <Rating
+          rating={product.rating}
+          numberOfReviews={product.numberOfReviews}
+        />
       </Flex>
       <Flex justify="space-between">
         <Box fontSize="2xl" color={useColorModeValue("gray.800", "white")}>
