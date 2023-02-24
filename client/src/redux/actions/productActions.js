@@ -9,15 +9,13 @@ export const getProducts = () => async (dispatch) => {
     const { data } = await axios.get(API_ENDPOINT);
     dispatch(setProducts(data));
   } catch (error) {
-    const { data } = error.response && error.response;
-    const { message } = error && error.message;
     dispatch(
       setError(
-        data
-          ? data.message
-          : message
-          ? message
-          : "An unexpected message has occured. Please try again later."
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+          ? error.message
+          : "An unexpected error has occured. Please try again later."
       )
     );
   }
