@@ -53,7 +53,7 @@ const RegistrationScreen = () => {
       .oneOf([Yup.ref("password"), null], "Passwords must match"),
   });
 
-  // check if user sign is successful and handle redirect
+  // check if user registration is successful and handle redirect
   useEffect(() => {
     if (userInfo) {
       navigate(redirect);

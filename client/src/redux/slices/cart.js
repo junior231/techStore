@@ -18,7 +18,7 @@ export const initialState = {
     : 0,
 };
 
-// update loacl storage with cartItems and subtotal
+// update local storage with cartItems and subtotal
 const updateLocalStorage = (cart) => {
   localStorage.setItem("cartItems", JSON.stringify(cart));
   localStorage.setItem("subtotal", JSON.stringify(calculateSubTotal(cart)));
