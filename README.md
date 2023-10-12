@@ -1,4 +1,4 @@
-# Techy
+# Techy Shop
 
 This is a full-stack e-commerce platform built from the ground up, using the latest technologies and best practices. This platform is designed to provide a seamless shopping experience for users while offering robust tools for administrators to manage the system efficiently. Whether you're a customer looking to browse and buy products or an admin overseeing orders and user accounts, this platform has you covered.
 
