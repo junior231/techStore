@@ -17,11 +17,18 @@ import {
   Heading,
   useToast,
   AlertTitle,
+  Tooltip,
+  Input,
+  Textarea,
 } from "@chakra-ui/react";
 import { MinusIcon, StarIcon, SmallAddIcon } from "@chakra-ui/icons";
 import { BiPackage, BiCheckShield, BiSupport } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
-import { getProduct } from "../redux/actions/productActions";
+import {
+  createProductReview,
+  getProduct,
+  resetProductError,
+} from "../redux/actions/productActions";
 import { addItemToCart } from "../redux/actions/cartActions";
 import { useEffect, useState } from "react";
 
@@ -30,14 +37,33 @@ const ProductScreen = () => {
   const dispatch = useDispatch();
   const toast = useToast();
   const [amount, setAmount] = useState(1);
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(1);
+  const [title, setTitle] = useState("");
+  const [reviewBoxOpen, setReviewBoxOpen] = useState(false);
+
   const productList = useSelector((state) => state.products);
   const cartList = useSelector((state) => state.cart);
-  const { loading, error, product } = productList;
+  const { loading, error, product, reviewSent } = productList;
   const { cart } = cartList;
+
+  const user = useSelector((state) => state.user);
+  const { userInfo } = user;
 
   useEffect(() => {
     dispatch(getProduct(id));
-  }, [id, cart, dispatch]);
+
+    // if reviewSent is true
+    if (reviewSent) {
+      toast({
+        description: "Product review saved",
+        status: "success",
+        isClosable: true,
+      });
+      dispatch(resetProductError());
+      setReviewBoxOpen(false);
+    }
+  }, [id, cart, dispatch, reviewSent, toast]);
 
   const changeAmount = (input) => {
     if (input === "plus") {
@@ -46,6 +72,17 @@ const ProductScreen = () => {
     if (input === "minus") {
       setAmount(amount - 1);
     }
+  };
+
+  // check if user has already reviewed Product
+  const hasUserReviewed = () =>
+    product.reviews.some((item) => item.user === userInfo._id);
+
+  // handle Product review submit
+  const handleOnSubmitReview = () => {
+    dispatch(
+      createProductReview(product._id, userInfo._id, comment, rating, title)
+    );
   };
 
   const handleAddToCart = () => {
@@ -212,6 +249,78 @@ const ProductScreen = () => {
               </Flex>
             </Stack>
 
+            {userInfo ? (
+              <>
+                <Tooltip
+                  label={
+                    hasUserReviewed()
+                      ? "You have already reviewed this product"
+                      : ""
+                  }
+                  fontSize="md"
+                >
+                  <Button
+                    isDisabled={hasUserReviewed()}
+                    my="20px"
+                    w="140px"
+                    colorScheme="orange"
+                    onClick={() => setReviewBoxOpen(!reviewBoxOpen)}
+                  >
+                    Write a review
+                  </Button>
+                </Tooltip>
+                {reviewBoxOpen ? (
+                  <Stack mb="20px">
+                    <Wrap>
+                      <HStack spacing="2px">
+                        <Button variant="outline" onClick={() => setRating(1)}>
+                          <StarIcon color="orange.500" />
+                        </Button>
+                        <Button variant="outline" onClick={() => setRating(2)}>
+                          <StarIcon
+                            color={rating >= 2 ? "orange.500" : "gray.200"}
+                          />
+                        </Button>
+                        <Button variant="outline" onClick={() => setRating(3)}>
+                          <StarIcon
+                            color={rating >= 3 ? "orange.500" : "gray.200"}
+                          />
+                        </Button>
+                        <Button variant="outline" onClick={() => setRating(4)}>
+                          <StarIcon
+                            color={rating >= 4 ? "orange.500" : "gray.200"}
+                          />
+                        </Button>
+                        <Button variant="outline" onClick={() => setRating(5)}>
+                          <StarIcon
+                            color={rating >= 5 ? "orange.500" : "gray.200"}
+                          />
+                        </Button>
+                      </HStack>
+                    </Wrap>
+                    <Input
+                      onChange={(e) => {
+                        setTitle(e.target.value);
+                      }}
+                      placeholder="Review Title (optional)"
+                    />
+                    <Textarea
+                      placeholder={`The ${product.name} is...`}
+                      onChange={(e) => {
+                        setComment(e.target.value);
+                      }}
+                    />
+                    <Button
+                      w="140px"
+                      colorScheme="orange"
+                      onClick={handleOnSubmitReview}
+                    >
+                      Publish review
+                    </Button>
+                  </Stack>
+                ) : null}
+              </>
+            ) : null}
             <Stack>
               <Text fontSize="xl" fontWeight="bold">
                 Reviews
@@ -240,7 +349,9 @@ const ProductScreen = () => {
                     <Box py="12px">{review.comment}</Box>
                     <Text fontSize="sm" color="gray.400">
                       by {review.name},{" "}
-                      {new Date(review.createdAt).toDateString()}{" "}
+                      {review.createdAt
+                        ? new Date(review.createdAt).toDateString()
+                        : null}
                     </Text>
                   </Box>
                 ))}

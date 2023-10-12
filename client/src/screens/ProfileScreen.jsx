@@ -16,19 +16,19 @@ import {
   StackDivider,
   Alert,
   useToast,
-} from '@chakra-ui/react';
-import { useSelector, useDispatch } from 'react-redux';
-import TextField from '../components/TextField';
-import PasswordTextField from '../components/PasswordTextField';
-import { useEffect, useState } from 'react';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+} from "@chakra-ui/react";
+import { useSelector, useDispatch } from "react-redux";
+import TextField from "../components/TextField";
+import PasswordTextField from "../components/PasswordTextField";
+import { useEffect, useState } from "react";
+import { Formik } from "formik";
+import * as Yup from "yup";
 import {
   updateProfile,
   resetUpdateSuccess,
-} from '../redux/actions/userActions';
-import { useLocation } from 'react-router';
-import { Navigate } from 'react-router-dom';
+} from "../redux/actions/userActions";
+import { useLocation } from "react-router";
+import { Navigate } from "react-router-dom";
 
 const ProfileScreen = () => {
   const user = useSelector((state) => state.user);
@@ -40,8 +40,8 @@ const ProfileScreen = () => {
   useEffect(() => {
     if (updateSuccess) {
       toast({
-        description: 'Profile saved',
-        status: 'success',
+        description: "Profile saved",
+        status: "success",
         isClosable: true,
       });
     }
@@ -49,15 +49,15 @@ const ProfileScreen = () => {
 
   // create yup schema for form validation
   const schema = Yup.object({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().email('Invalid email').required('Email is required'),
+    name: Yup.string().required("Name is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string()
-      .min(3, 'Password is too short. Must contain at least 3 characters')
-      .required('Password is required.'),
+      .min(3, "Password is too short. Must contain at least 3 characters")
+      .required("Password is required."),
     confirmPassword: Yup.string()
-      .min(3, 'Password is too short. Must contain at least 3 characters')
-      .required('Password is required.')
-      .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+      .min(3, "Password is too short. Must contain at least 3 characters")
+      .required("Password is required.")
+      .oneOf([Yup.ref("password"), null], "Passwords must match"),
   });
 
   const handleSubmit = (values) => {
@@ -71,8 +71,8 @@ const ProfileScreen = () => {
     <Formik
       initialValues={{
         email: userInfo.email,
-        password: '',
-        confirmPassword: '',
+        password: "",
+        confirmPassword: "",
         name: userInfo.name,
       }}
       validationSchema={schema}
@@ -81,17 +81,17 @@ const ProfileScreen = () => {
       {(formik) => (
         <Box
           minH="100vh"
-          maxW={{ base: '3xl', lg: '7xl' }}
+          maxW={{ base: "3xl", lg: "7xl" }}
           mx="auto"
-          px={{ base: '4', md: '8', lg: '12' }}
-          py={{ base: '6', md: '8', lg: '12' }}
+          px={{ base: "4", md: "8", lg: "12" }}
+          py={{ base: "6", md: "8", lg: "12" }}
         >
           <Stack
-            direction={{ base: 'column', lg: 'row' }}
-            align={{ lg: 'flex-start' }}
+            direction={{ base: "column", lg: "row" }}
+            align={{ lg: "flex-start" }}
             spacing="10"
           >
-            <Stack flex="1.5" mb={{ base: '2xl', md: 'none' }}>
+            <Stack flex="1.5" mb={{ base: "2xl", md: "none" }}>
               <Heading fontSize="2xl" fontWeight="extrabold">
                 Profile
               </Heading>
@@ -156,7 +156,7 @@ const ProfileScreen = () => {
               direction="column"
               align="center"
               flex="1"
-              _dark={{ bg: 'gray.900' }}
+              _dark={{ bg: "gray.900" }}
             >
               <Card>
                 <CardHeader>
@@ -165,7 +165,7 @@ const ProfileScreen = () => {
                 <CardBody>
                   <Stack divider={<StackDivider />} spacing="4">
                     <Box pt="2" fontSize="sm">
-                      Registered on{' '}
+                      Registered on{" "}
                       {new Date(userInfo.createdAt).toDateString()}
                     </Box>
                   </Stack>

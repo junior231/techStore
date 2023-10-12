@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 import protectRoute from "../middleware/authMiddleware.js";
+import Order from "../models/Order.js";
 
 const userRoutes = express.Router();
 
@@ -22,6 +23,7 @@ const loginUser = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
+      createdAt: user.createdAt,
     });
   } else {
     res.status(401);
@@ -50,7 +52,6 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
-      createdAt: user.createdAt,
     });
   } else {
     res.status(400).send("We could not register you.");
@@ -93,9 +94,20 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const getUserOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.params.id });
+  if (orders) {
+    res.json(orders);
+  } else {
+    res.status(404);
+    throw new Error("No orders found");
+  }
+});
+
 userRoutes.route("/login").post(loginUser);
 userRoutes.route("/register").post(registerUser);
 // if user is authenticated, proceed to next middleware ie updateUserProfile
 userRoutes.route("/profile/:id").put(protectRoute, updateUserProfile);
+userRoutes.route("/:id").get(protectRoute, getUserOrders);
 
 export default userRoutes;
