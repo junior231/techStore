@@ -34,7 +34,7 @@ cd into client directory. npm install or yarn add
 ```
 - Start the application
 ```
-npm run app 
+in root directory, npm run app 
 ```
 
 ## Technologies
