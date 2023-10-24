@@ -11,6 +11,7 @@ import RegistrationScreen from "./screens/RegistrationScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import CheckoutScreen from "./screens/CheckoutScreen";
 import UserOrdersScreen from "./screens/UserOrdersScreen";
+import AdminConsoleScreen from "./screens/AdminConsoleScreen";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route element={<ProfileScreen />} path="/profile" />
             <Route element={<CheckoutScreen />} path="/checkout" />
             <Route element={<UserOrdersScreen />} path="/your-orders" />
+            <Route element={<AdminConsoleScreen />} path="/admin-console" />
           </Routes>
         </main>
 

@@ -2,7 +2,7 @@ import express from "express";
 import User from "../models/User.js";
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
-import protectRoute from "../middleware/authMiddleware.js";
+import { protectRoute, checkIsAdmin } from "../middleware/authMiddleware.js";
 import Order from "../models/Order.js";
 
 const userRoutes = express.Router();
@@ -104,10 +104,30 @@ const getUserOrders = asyncHandler(async (req, res) => {
   }
 });
 
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.json(users);
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findByIdAndRemove(userId);
+    res.json(user);
+  } catch (error) {
+    res.status(404);
+    throw new Error("User not found.");
+  }
+});
+
 userRoutes.route("/login").post(loginUser);
 userRoutes.route("/register").post(registerUser);
 // if user is authenticated, proceed to next middleware ie updateUserProfile
 userRoutes.route("/profile/:id").put(protectRoute, updateUserProfile);
 userRoutes.route("/:id").get(protectRoute, getUserOrders);
+// check if user is logged in and isAdmin, then get all users
+userRoutes.route("/").get(protectRoute, checkIsAdmin, getAllUsers);
+// check if user is logged in and isAdmin, then delete user
+userRoutes.route("/:id").delete(protectRoute, checkIsAdmin, deleteUser);
 
 export default userRoutes;
