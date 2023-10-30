@@ -11,6 +11,7 @@ import {
 import { Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import UsersTab from "../components/admin/UsersTab";
+import OrdersTab from "../components/admin/OrdersTab";
 
 const AdminConsoleScreen = () => {
   const user = useSelector((state) => state.user);
@@ -35,13 +36,16 @@ const AdminConsoleScreen = () => {
           <Tabs size="md" variant="enclosed">
             <TabList>
               <Tab>Users</Tab>
-              <Tab>Products</Tab>
-              <Tab>Reviews</Tab>
+              {/* <Tab>Products</Tab>
+              <Tab>Reviews</Tab> */}
               <Tab>Orders</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
                 <UsersTab />
+              </TabPanel>
+              <TabPanel w="6xl">
+                <OrdersTab />
               </TabPanel>
             </TabPanels>
           </Tabs>
