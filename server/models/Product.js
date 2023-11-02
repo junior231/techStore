@@ -21,7 +21,7 @@ const productSchema = new mongoose.Schema(
     // when a review is created, save with reviewSchema
     reviews: [reviewSchema],
     rating: { type: Number, required: true, default: 0 },
-    numberOfReviews: { type: Number, required: true },
+    numberOfReviews: { type: Number, required: true, default: 0 },
     price: { type: Number, required: true, default: 0 },
     stock: { type: Number, required: true, default: 0 },
     productIsNew: { type: Boolean, required: true, default: false },

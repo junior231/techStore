@@ -9,6 +9,12 @@ import {
   orderDelete,
   setDeliveredFlag,
 } from "../slices/admin";
+import {
+  setProductUpdatedFlag,
+  setProducts,
+  setProductDeletedFlag,
+  setProductUploadedFlag,
+} from "../slices/products";
 
 // get all users
 export const getAllUsers = () => async (dispatch, getState) => {
@@ -159,4 +165,115 @@ export const setDelivered = (id) => async (dispatch, getState) => {
 
 export const resetErrorandRemoval = () => async (dispatch) => {
   dispatch(resetError());
+};
+
+// update product
+export const updateProduct =
+  (brand, name, category, stock, price, id, productIsNew, description, image) =>
+  async (dispatch, getState) => {
+    const {
+      user: { userInfo },
+    } = getState();
+
+    try {
+      // configure request header with Authorization
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.put(
+        `api/products`,
+        {
+          brand,
+          category,
+          stock,
+          price,
+          productIsNew,
+          description,
+          name,
+          id,
+          image,
+        },
+        config
+      );
+      dispatch(setProducts(data));
+      dispatch(setProductUpdatedFlag());
+    } catch (error) {
+      dispatch(
+        setError(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+            ? error.message
+            : "Product could not be updated."
+        )
+      );
+    }
+  };
+
+// delete product
+export const deleteProduct = (id) => async (dispatch, getState) => {
+  const {
+    user: { userInfo },
+  } = getState();
+
+  try {
+    // configure request header with Authorization
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+        "Content-Type": "application/json",
+      },
+    };
+    const { data } = await axios.delete(
+      `api/products/${id}`,
+
+      config
+    );
+    dispatch(setProducts(data));
+    dispatch(setProductDeletedFlag());
+    dispatch(resetError());
+  } catch (error) {
+    dispatch(
+      setError(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+          ? error.message
+          : "Product could not be deleted."
+      )
+    );
+  }
+};
+
+// upload product
+export const uploadProduct = (newProduct) => async (dispatch, getState) => {
+  const {
+    user: { userInfo },
+  } = getState();
+
+  try {
+    // configure request header with Authorization
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+        "Content-Type": "application/json",
+      },
+    };
+    const { data } = await axios.post(`api/products`, newProduct, config);
+    dispatch(setProducts(data));
+    dispatch(setProductUploadedFlag());
+  } catch (error) {
+    dispatch(
+      setError(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+          ? error.message
+          : "Product could not be uploaded."
+      )
+    );
+  }
 };
