@@ -9,6 +9,7 @@ export const initialState = {
   isProductUpdated: false,
   isProductDeleted: false,
   isProductUploaded: false,
+  isReviewRemoved: false,
 };
 
 export const productSlice = createSlice({
@@ -43,6 +44,7 @@ export const productSlice = createSlice({
       state.isProductUpdated = false;
       state.isProductDeleted = false;
       state.isProductUploaded = false;
+      state.isReviewRemoved = false;
     },
     setProductUpdatedFlag: (state) => {
       state.isProductUpdated = true;
@@ -54,6 +56,11 @@ export const productSlice = createSlice({
     },
     setProductUploadedFlag: (state) => {
       state.isProductUploaded = true;
+      state.loading = false;
+    },
+    setReviewRemovalFlag: (state) => {
+      state.error = null;
+      state.isReviewRemoved = true;
       state.loading = false;
     },
   },
@@ -69,6 +76,7 @@ export const {
   setProductUpdatedFlag,
   setProductDeletedFlag,
   setProductUploadedFlag,
+  setReviewRemovalFlag,
 } = productSlice.actions;
 export default productSlice.reducer;
 
