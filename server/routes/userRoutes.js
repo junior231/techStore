@@ -26,8 +26,8 @@ const loginUser = asyncHandler(async (req, res) => {
       createdAt: user.createdAt,
     });
   } else {
-    res.status(401);
-    throw new Error("Invalid email or passwword.");
+    res.status(401).send("Invalid email or password");
+    throw new Error("Invalid email or password.");
   }
 });
 
@@ -37,6 +37,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const userExists = await User.findOne({ email });
   if (userExists) {
     res.status(400).send("We already have an account with that email address.");
+    throw new Error("We already have an account with that email address.");
   }
 
   const user = await User.create({
@@ -54,10 +55,10 @@ const registerUser = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(400).send("We could not register you.");
-    throw new Error(
-      "Something went wrong. Please check your data and try again."
-    );
+    res.status(400).send("Invalid user data.");
+    // throw new Error(
+    //   "Invalid user data. Please check your data and try again."
+    // );
   }
 });
 
@@ -89,8 +90,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       createdAt: updatedUser.createdAt,
     });
   } else {
-    res.status(404);
-    throw new Error("User not found.");
+    res.status(404).send("User not found");
+    // throw new Error("User not found.");
   }
 });
 
@@ -99,8 +100,8 @@ const getUserOrders = asyncHandler(async (req, res) => {
   if (orders) {
     res.json(orders);
   } else {
-    res.status(404);
-    throw new Error("No orders found");
+    res.status(404).send("No orders found");
+    // throw new Error("No orders found");
   }
 });
 
@@ -115,7 +116,7 @@ const deleteUser = asyncHandler(async (req, res) => {
     const user = await User.findByIdAndRemove(userId);
     res.json(user);
   } catch (error) {
-    res.status(404);
+    res.status(404).send("User not found");
     throw new Error("User not found.");
   }
 });
