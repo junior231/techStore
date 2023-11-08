@@ -9,7 +9,7 @@ const userRoutes = express.Router();
 
 //TODO: redefine expiresIn
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "60d" });
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 };
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -27,7 +27,7 @@ const loginUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(401).send("Invalid email or password");
-    throw new Error("Invalid email or password.");
+    // throw new Error("Invalid email or password.");
   }
 });
 

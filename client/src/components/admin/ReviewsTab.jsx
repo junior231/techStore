@@ -8,7 +8,6 @@ import {
   Thead,
   Tbody,
   Button,
-  useDisclosure,
   Alert,
   Stack,
   Spinner,
@@ -26,7 +25,7 @@ import {
   Spacer,
   Textarea,
 } from "@chakra-ui/react";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeReview } from "../../redux/actions/adminActions";
 import {
